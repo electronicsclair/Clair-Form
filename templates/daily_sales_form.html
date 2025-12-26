@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily Secondary Sales</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="page">
+
+    <div class="hero">
+      <div class="hero-inner">
+        <h1>Daily Secondary Sales</h1>
+        <div class="pill">Only members of your workspace can fill this form</div>
+      </div>
+    </div>
+
+    {% if errors and errors|length %}
+      <div class="alert">
+        <div class="alert-title">Fix these issues</div>
+        <ul>
+          {% for e in errors %}
+            <li>{{ e }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <form method="POST" class="stack">
+
+      <div class="card">
+        <div class="card-title">Date *</div>
+        <input
+          class="input"
+          type="date"
+          name="date"
+          value="{{ (v.date or '') if v else '' }}"
+          required
+        />
+      </div>
+
+      <div class="card">
+        <div class="card-title">Salesman_ID *</div>
+        <select class="select" name="salesman_id" required>
+          <option value="">-- select --</option>
+          {% for value, label in salesman_opts %}
+            <option value="{{ value }}" {% if v and v.salesman_id==value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Distributor_ID *</div>
+        <select class="select" name="distributor_id" required>
+          <option value="">-- select --</option>
+          {% for value, label in distributor_opts %}
+            <option value="{{ value }}" {% if v and v.distributor_id==value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Region *</div>
+        <input
+          class="input"
+          type="text"
+          name="region"
+          placeholder="e.g., Delhi"
+          value="{{ (v.region or '') if v else '' }}"
+          required
+        />
+      </div>
+
+      <div class="card">
+        <div class="card-title">Outlet_ID *</div>
+
+        {% if has_outlet_dropdown %}
+          <select class="select" name="outlet_id" required>
+            <option value="">-- select --</option>
+            {% for value, label in outlet_opts %}
+              <option value="{{ value }}" {% if v and v.outlet_id==value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        {% else %}
+          <input
+            class="input"
+            type="text"
+            name="outlet_id"
+            placeholder="Outlet ID"
+            value="{{ (v.outlet_id or '') if v else '' }}"
+            required
+          />
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <div class="card-title">Outlet_Name</div>
+        <input
+          class="input"
+          type="text"
+          name="outlet_name"
+          placeholder="Outlet name"
+          value="{{ (v.outlet_name or '') if v else '' }}"
+        />
+      </div>
+
+      <div class="card">
+        <div class="card-title">SKU_ID *</div>
+        <select class="select" name="sku_id" required>
+          <option value="">-- select --</option>
+          {% for value, label in sku_opts %}
+            <option value="{{ value }}" {% if v and v.sku_id==value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Quantity *</div>
+        <input
+          class="input"
+          type="number"
+          name="quantity"
+          inputmode="numeric"
+          min="0"
+          step="1"
+          placeholder="0"
+          value="{{ (v.quantity or '') if v else '' }}"
+          required
+        />
+      </div>
+
+      <div class="card">
+        <div class="card-title">Value *</div>
+        <input
+          class="input"
+          type="number"
+          name="value"
+          inputmode="decimal"
+          min="0"
+          step="0.01"
+          placeholder="0.00"
+          value="{{ (v.value or '') if v else '' }}"
+          required
+        />
+      </div>
+
+      <div class="card">
+        <div class="card-title">Selling Mode * (PULL / PUSH / PROMO / RETURN)</div>
+        <div class="radio-group">
+          {% set sm = (v.selling_mode if v else '') %}
+          <label class="radio">
+            <input type="radio" name="selling_mode" value="PUSH" {% if sm=='PUSH' %}checked{% endif %} required>
+            <span>PUSH</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="selling_mode" value="PULL" {% if sm=='PULL' %}checked{% endif %}>
+            <span>PULL</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="selling_mode" value="PROMO" {% if sm=='PROMO' %}checked{% endif %}>
+            <span>PROMO</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="selling_mode" value="RETURN" {% if sm=='RETURN' %}checked{% endif %}>
+            <span>RETURN</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Did you have to VISIT the dealer? *</div>
+        <div class="radio-group">
+          {% set vy = (v.visit_yn if v else '') %}
+          <label class="radio">
+            <input type="radio" name="visit_yn" value="Y" {% if vy=='Y' %}checked{% endif %} required>
+            <span>Y</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="visit_yn" value="N" {% if vy=='N' %}checked{% endif %}>
+            <span>N</span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Submit</button>
+
+    </form>
+
+    <div class="footer-space"></div>
+  </div>
+</body>
+</html>
