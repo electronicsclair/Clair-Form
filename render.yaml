@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: clair-form
+    env: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: "5055"
+      - key: FLASK_SECRET_KEY
+        sync: false
+      - key: NOTION_TOKEN
+        sync: false
+      - key: NOTION_VERSION
+        value: "2022-06-28"
+      - key: DB_DAILY_SALES
+        sync: false
+      - key: DB_MASTER_SALESMAN
+        sync: false
+      - key: DB_MASTER_DISTRIBUTOR
+        sync: false
+      - key: DB_MASTER_SKU
+        sync: false
